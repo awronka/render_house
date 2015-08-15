@@ -4,6 +4,5 @@
 
 app.factory('RecEngine', function(){
 
-	
 
-})
+}])
