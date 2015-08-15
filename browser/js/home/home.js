@@ -8,10 +8,13 @@ app.config(function ($stateProvider) {
 
 'use strict';
 
-app.controller('HomeController', function ($scope, RenderService) {
+app.controller('HomeController', function ($scope, RenderService, RecEngine) {
 
     $scope.changeModelUrl = function(newUrl){
     	RenderService.changeModelUrl(newUrl);
     }
+
+
+
 
 });
