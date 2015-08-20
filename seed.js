@@ -32,6 +32,7 @@ function generateCollections (num,seedFunc){
   return _.times(num,seedFunc)
 }
 ''
+
 var numUsers = 100,
     numProducts = 300;
 
