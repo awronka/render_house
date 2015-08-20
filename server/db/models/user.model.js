@@ -35,7 +35,7 @@ var schema = new mongoose.Schema({
         token: String,
     },
     pictureUrl: String,
-    purchaseHistroy:[{type: mongoose.Schema.Types.ObjectId, ref:"Product", required:true}]
+    // purchaseHistroy:[{type: mongoose.Schema.Types.ObjectId, ref:"Product", required:true}]
 });
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
@@ -77,4 +77,5 @@ schema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
-mongoose.model('User', schema);
+exports.module = mongoose.model('User', schema);
+
