@@ -15,10 +15,8 @@ app.factory('Model', function ($http) {
 
 	// Used in product-detail state
 	Model.prototype.fetch = function(){
-		console.log(this.url);
 		return $http.get(this.url)
 			.then(function (res) {
-				console.log("individual fetch returned");
 				Model.changeModel(res.data);
 				return new Model(res.data);
 			});
@@ -35,20 +33,14 @@ app.factory('Model', function ($http) {
 			});
 	}
 
-
-
-
-
 	// Rendering
 	var renderObj = {
-		modelFileUrl: 'models/untitled-scene/untitled-scene.json',
-		creator: 'Mary Anne'
+		modelFileUrl: 'models/untitled-scene/untitled-scene.json'
 	};
 	// Renderer Access Methods
 	Model.changeModel = function (newObj) {
 		renderObj = newObj || {
-			modelFileUrl: 'models/untitled-scene/untitled-scene.json',
-			creator: 'Could Be You'
+			modelFileUrl: 'models/untitled-scene/untitled-scene.json'
 		};
 	};
 	Model.getModelUrl = function () {
@@ -57,6 +49,19 @@ app.factory('Model', function ($http) {
 	Model.getModel = function () {
 		return renderObj;
 	};
+	
+	Model.deleteModel = function(productid){
+		return $http.delete(Model.url+productid).then(function(res){
+			return res.data;
+		})
+	}
+	
+	Model.getUploads = function(userid){
+		console.log("hit 2")
+		return $http.get(Model.url+userid).then(function(res){
+			return res.data;
+		})
+	}
 
 
 	return Model;

@@ -6,14 +6,40 @@ var User = mongoose.model('User');
 
 
 
+////////////////////////////UTILITY FUNCTIONS/////////////////////////////////////
+
+function topTags(tag){
+    Product.find({tag:tag})
+    .then(function(err,prods){
+        if (err) return err
+        
+        
+        
+    })
+}
+
+
+
 router.get('/', function(req, res, next) {
-    var id = req.body.id;
-    User.find({
-            _id: id
+    if (req.session){
+/////////rec engine if the user is signed in
+        User.find({
+                _id: id
         })
-        .then(function(data) {
-            res.json(data);
-            console.log('this is req router', req.body)
+        .populate('purchaseHistory')
+        .then(function(err,data) {
+            
+            if(err) {console.log('!!!!!ERROR!!!!!!',err)}
+            
+            var searchedTags = data.purchaseHistory.map(function(obj){
+                    return obj.tags
+                    }
+                )
+            
+          
+            
+            
+            
         })
         .then(null, next);
 });

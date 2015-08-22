@@ -1,12 +1,14 @@
 'use strict';
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var Admin = require('./admin.model.js')
 // var Product = require('/product.model.js');
 // var Cart = require('/cart.model.js');
 
 
 var schema = new mongoose.Schema({
-    isAdmin: {type: Boolean, default: false},
+    refresh:{type:Boolean, default: false},
+    isAdmin: {type: Boolean, default: true},   
 	firstName: String,
 	lastName: String,
 	displayName: {type: String, unique: true},
@@ -43,11 +45,11 @@ var schema = new mongoose.Schema({
 });
 
 // Virtuals
+
 schema.virtual('fullName')
     .get(function() {
         return this.firstName + " " + this.lastName;
-    });
-
+    })
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
 // are all used for local authentication security.
@@ -88,5 +90,10 @@ schema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
+<<<<<<< HEAD
 exports.module = mongoose.model('User', schema);
 
+=======
+
+mongoose.model('User', schema);
+>>>>>>> 5de0b9aa9793d3b7dff17c3ff2af5a0206dabcf8
