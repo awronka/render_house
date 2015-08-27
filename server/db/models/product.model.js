@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 
 var Product = new mongoose.Schema({
-	title: {type: String, maxlength: 20, required:true},
+	title: {type: String, maxlength: 200, required:true},
 	description: {type: String, max: 300},
 	snapshotFileUrl: {type:String},
 	modelFileUrl: {type:String},
@@ -19,4 +19,4 @@ var Product = new mongoose.Schema({
 });
 
 
-mongoose.model("Product",Product);
+exports.module = mongoose.model("Product",Product);

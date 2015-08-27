@@ -37,9 +37,11 @@ var schema = new mongoose.Schema({
         token: String,
     },
     pictureUrl: String,
+
     purchaseHistory:[{type: mongoose.Schema.Types.ObjectId, ref:"Product"}],
     myModels: [{type: mongoose.Schema.Types.ObjectId, ref:"Product"}]
     //purchasedBy: [stripe tokens from user purchase sessions?]
+
 });
 
 // Virtuals
@@ -88,5 +90,10 @@ schema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
+<<<<<<< HEAD
+exports.module = mongoose.model('User', schema);
+
+=======
 
 mongoose.model('User', schema);
+>>>>>>> 5de0b9aa9793d3b7dff17c3ff2af5a0206dabcf8

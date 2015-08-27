@@ -21,8 +21,8 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var chalk = require('chalk');
 var connectToDb = require('./server/db');
-var User = Promise.promisifyAll(mongoose.model('User'));
-var Product = Promise.promisifyAll(mongoose.model('Product'));
+var User = mongoose.model('User')
+var Product = mongoose.model('Product')
 var _ = require('lodash');
 var chance = require('chance')();
 
@@ -32,6 +32,7 @@ function generateCollections (num,seedFunc){
   return _.times(num,seedFunc)
 }
 ''
+
 var numUsers = 100,
     numProducts = 300;
 
@@ -42,29 +43,28 @@ function randPersonPhoto (){
 }
 
 var seedUser = function(){
+    var first = chance.name().split(" ")[0];
+    var last = chance.name().split(" ")[1];
     return new User({
         isAdmin: Math.random() < .02,
-        firstName: chance.name().split(" ")[0],
-        lastName: chance.name().split(" ")[1],
-        displayName:String,
+        firstName: first,
+        lastName: last,
+        displayName: first+" "+last,
         phone: chance.phone(),
         userBlurb: chance.paragraph({sentence:4}),
         email: chance.email(),
         password: "",
         salt: "",
-        pictureUrl: randPersonPhoto(),
-        purchaseHistroy:[{type: mongoose.Schema.Types.ObjectId, ref:"Product", required:true}]
+        pictureUrl: randPersonPhoto()
+        // purchaseHistroy:chance.pick(productObjectId)
     });
 }
 
 
 
 //////these functions generate the users than extrapolates out the objectId///////////////
-var seededUsers = generateCollections(numUsers,seedUser);
- 
-var userObjectId = seededUsers.map(function(obj){
-       return obj._id
- })
+
+
 
 
 /////////////////////////////////////// product generation ///////////////////////////////////////////////
@@ -87,10 +87,13 @@ function randModel () {
   return listOfModels[Math.floor(Math.random()*numOfModels)];
 }
 
+
 var seedProduct = function(){
    return new Product({
        title: chance.name(),
        description: chance.paragraph({sentence:4}), // reeturns a rand paragraph with 4 sentences
+
+
        snapshotFileUrl: randPhoto(), //return the website lorempixel
        modelFileUrl: randModel(),
        tags: generateTags(), // runs function above and assigns two types of tags to every instance
@@ -106,20 +109,30 @@ var seedProduct = function(){
 }
 
 
-console.log(chance.pick(userObjectId))
-var seededProducts = generateCollections(numProducts,seedUser);
+var seededUsers = generateCollections(numUsers,seedUser);
 
-// Seeding function - to be run when the DB starts up
+var userObjectId = seededUsers.map(function(obj){
+       return obj._id
+ })
+
+var seededProducts = generateCollections(numProducts,seedProduct);
+
+////////////////////// Seeding function - to be run when the DB starts up
 function seed () {
     seededUsers.map(function(obj){
-        obj.save()   
+        // console.log(obj);
+        obj.save(function(err) {
+            console.log("Error", err);
+        })   
     });
     seededProducts.map(function(obj){
-        obj.save();
+        console.log(obj);
+        obj.save(function(err){
+            console.log('error',err)
+        });
     })
 }
 
-connectToDb.then(function () {
-   seed();
-   console.log('seed successful!')
-});
+connectToDb.then(function(){
+    seed();  
+})
